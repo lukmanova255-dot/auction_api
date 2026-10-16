@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: 1bac24020
+
+server:
+  port: 8080
