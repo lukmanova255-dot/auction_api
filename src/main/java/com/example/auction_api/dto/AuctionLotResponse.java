@@ -27,8 +27,13 @@ public class AuctionLotResponse {
 
     public static AuctionLotResponse from(AuctionLot lot) {
         return new AuctionLotResponse(
-                lot.getId(), lot.getItemId(), lot.getStartPrice(), lot.getBidStep(),
-                lot.getStartTime(), lot.getEndTime(), lot.getStatus()
+                lot.getId(),
+                lot.getItem() != null ? lot.getItem().getId() : null,
+                lot.getStartPrice(),
+                lot.getBidStep(),
+                lot.getStartTime(),
+                lot.getEndTime(),
+                lot.getStatus()
         );
     }
 

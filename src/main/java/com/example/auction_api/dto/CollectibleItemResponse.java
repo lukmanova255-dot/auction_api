@@ -23,7 +23,7 @@ public class CollectibleItemResponse {
                 item.getName(),
                 item.getDescription(),
                 item.getCondition(),
-                item.getOwnerId()
+                item.getOwner() != null ? item.getOwner().getId() : null
         );
     }
 

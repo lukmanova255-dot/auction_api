@@ -21,7 +21,13 @@ public class BidResponse {
     }
 
     public static BidResponse from(Bid bid) {
-        return new BidResponse(bid.getId(), bid.getLotId(), bid.getUserId(), bid.getAmount(), bid.getTime());
+        return new BidResponse(
+                bid.getId(),
+                bid.getLot() != null ? bid.getLot().getId() : null,
+                bid.getUser() != null ? bid.getUser().getId() : null,
+                bid.getAmount(),
+                bid.getTime()
+        );
     }
 
     public Long getId() { return id; }

@@ -1,0 +1,119 @@
+### USERS - Create
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{"username": "alice", "email": "alice@example.com"}
+
+### USERS - Create 2
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{"username": "bob", "email": "bob@example.com"}
+
+### USERS - Get all
+GET http://localhost:8080/api/users
+
+### USERS - Get by id
+GET http://localhost:8080/api/users/1
+
+### USERS - Update
+PATCH http://localhost:8080/api/users/1
+Content-Type: application/json
+
+{"email": "alice.new@example.com"}
+
+### USERS - Delete
+DELETE http://localhost:8080/api/users/999
+
+### ITEMS - Create
+POST http://localhost:8080/api/collectible-items
+Content-Type: application/json
+
+{"name": "Rare coin", "description": "1899 dollar", "condition": "MINT", "ownerId": 1}
+
+### ITEMS - Get all
+GET http://localhost:8080/api/collectible-items
+
+### ITEMS - Get by id
+GET http://localhost:8080/api/collectible-items/1
+
+### ITEMS - Update
+PATCH http://localhost:8080/api/collectible-items/1
+Content-Type: application/json
+
+{"condition": "GOOD"}
+
+### ITEMS - Delete
+DELETE http://localhost:8080/api/collectible-items/1
+
+### LOTS - Create
+POST http://localhost:8080/api/auction-lots
+Content-Type: application/json
+
+{"itemId": 1, "startPrice": 1000, "bidStep": 100}
+
+### LOTS - Get all
+GET http://localhost:8080/api/auction-lots
+
+### LOTS - Get by id
+GET http://localhost:8080/api/auction-lots/1
+
+### LOTS - Update
+PATCH http://localhost:8080/api/auction-lots/1
+Content-Type: application/json
+
+{"startPrice": 1100}
+
+### LOTS - Delete
+DELETE http://localhost:8080/api/auction-lots/1
+
+### BIDS - Create
+POST http://localhost:8080/api/bids
+Content-Type: application/json
+
+{"lotId": 1, "userId": 1, "amount": 1200}
+
+### BIDS - Get all
+GET http://localhost:8080/api/bids
+
+### BIDS - Get by id
+GET http://localhost:8080/api/bids/1
+
+### BIDS - Update
+PATCH http://localhost:8080/api/bids/1
+Content-Type: application/json
+
+{"amount": 1300}
+
+### BIDS - Delete
+DELETE http://localhost:8080/api/bids/1
+
+### DEALS - Create
+POST http://localhost:8080/api/auction-deals
+Content-Type: application/json
+
+{"lotId": 1}
+
+### DEALS - Get all
+GET http://localhost:8080/api/auction-deals
+
+### DEALS - Get by id
+GET http://localhost:8080/api/auction-deals/1
+
+### DEALS - Delete
+DELETE http://localhost:8080/api/auction-deals/1
+
+### BUSINESS - Close lot
+POST http://localhost:8080/api/business/lots/2/close
+
+### BUSINESS - Pay deal
+POST http://localhost:8080/api/business/deals/2/pay
+
+### BUSINESS - Withdraw bid
+POST http://localhost:8080/api/business/bids/2/withdraw?userId=1
+
+### BUSINESS - Cancel lot
+POST http://localhost:8080/api/business/lots/6/cancel
+
+### BUSINESS - Transfer item
+POST http://localhost:8080/api/business/items/1/transfer?newOwnerId=2

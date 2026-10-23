@@ -4,6 +4,7 @@ import com.example.auction_api.dto.BidRequest;
 import com.example.auction_api.exception.NotFoundException;
 import com.example.auction_api.model.AuctionLot;
 import com.example.auction_api.model.Bid;
+import com.example.auction_api.model.User;
 import com.example.auction_api.repository.AuctionDealRepository;
 import com.example.auction_api.repository.BidRepository;
 import org.springframework.stereotype.Service;
@@ -51,26 +52,18 @@ public class BidService {
         }
 
         AuctionLot lot = lotService.findById(req.getLotId());
-
         if ("CLOSED".equals(lot.getStatus())) {
             throw new IllegalStateException("AuctionLot is closed");
         }
-        if (!userService.existsById(req.getUserId())) {
-            throw new NotFoundException("User not found: id=" + req.getUserId());
-        }
+
+        User user = userService.findById(req.getUserId());
 
         BigDecimal minAmount = lot.getStartPrice().add(lot.getBidStep());
         if (req.getAmount().compareTo(minAmount) < 0) {
             throw new IllegalArgumentException("amount must be >= " + minAmount);
         }
 
-        Bid bid = new Bid(
-                null,
-                req.getLotId(),
-                req.getUserId(),
-                req.getAmount(),
-                LocalDateTime.now()
-        );
+        Bid bid = new Bid(lot, user, req.getAmount(), LocalDateTime.now());
         return repository.save(bid);
     }
 
@@ -84,9 +77,7 @@ public class BidService {
 
     public void delete(Long id) {
         findById(id);
-        boolean usedInDeal = dealRepository.findAll().stream()
-                .anyMatch(d -> id.equals(d.getWinningBidId()));
-        if (usedInDeal) {
+        if (dealRepository.existsByWinningBidId(id)) {
             throw new IllegalStateException("Cannot delete Bid: it is the winning bid of an AuctionDeal");
         }
         repository.deleteById(id);

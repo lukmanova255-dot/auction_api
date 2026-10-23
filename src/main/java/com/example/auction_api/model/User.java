@@ -1,15 +1,28 @@
 package com.example.auction_api.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "users")
 public class User {
-    private Long id;
-    private String username;
-    private String email;
-    private final LocalDateTime createdAt;
 
-    public User(Long id, String username, String email) {
-        this.id = id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true, length = 100)
+    private String username;
+
+    @Column(nullable = false, length = 150)
+    private String email;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    public User() {}
+
+    public User(String username, String email) {
         this.username = username;
         this.email = email;
         this.createdAt = LocalDateTime.now();
@@ -25,4 +38,5 @@ public class User {
     public void setEmail(String email) { this.email = email; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

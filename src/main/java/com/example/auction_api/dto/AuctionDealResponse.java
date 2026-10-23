@@ -21,8 +21,11 @@ public class AuctionDealResponse {
 
     public static AuctionDealResponse from(AuctionDeal deal) {
         return new AuctionDealResponse(
-                deal.getId(), deal.getLotId(), deal.getWinningBidId(),
-                deal.getAmount(), deal.getTransferStatus()
+                deal.getId(),
+                deal.getLot() != null ? deal.getLot().getId() : null,
+                deal.getWinningBid() != null ? deal.getWinningBid().getId() : null,
+                deal.getAmount(),
+                deal.getTransferStatus()
         );
     }
 

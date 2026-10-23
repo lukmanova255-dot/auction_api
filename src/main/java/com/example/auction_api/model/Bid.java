@@ -1,19 +1,36 @@
 package com.example.auction_api.model;
 
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "bids")
 public class Bid {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long lotId;
-    private Long userId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "lot_id", nullable = false)
+    private AuctionLot lot;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal amount;
+
+    @Column(nullable = false)
     private LocalDateTime time;
 
-    public Bid(Long id, Long lotId, Long userId, BigDecimal amount, LocalDateTime time) {
-        this.id = id;
-        this.lotId = lotId;
-        this.userId = userId;
+    public Bid() {}
+
+    public Bid(AuctionLot lot, User user, BigDecimal amount, LocalDateTime time) {
+        this.lot = lot;
+        this.user = user;
         this.amount = amount;
         this.time = time;
     }
@@ -21,11 +38,11 @@ public class Bid {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public Long getLotId() { return lotId; }
-    public void setLotId(Long lotId) { this.lotId = lotId; }
+    public AuctionLot getLot() { return lot; }
+    public void setLot(AuctionLot lot) { this.lot = lot; }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
     public BigDecimal getAmount() { return amount; }
     public void setAmount(BigDecimal amount) { this.amount = amount; }

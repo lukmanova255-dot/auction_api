@@ -1,18 +1,35 @@
 package com.example.auction_api.model;
 
-public class CollectibleItem {
-    private Long id;
-    private String name;
-    private String description;
-    private String condition;
-    private Long ownerId;
+import jakarta.persistence.*;
 
-    public CollectibleItem(Long id, String name, String description, String condition, Long ownerId) {
-        this.id = id;
+@Entity
+@Table(name = "collectible_items")
+public class CollectibleItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 150)
+    private String name;
+
+    @Column(length = 500)
+    private String description;
+
+    @Column(nullable = false, length = 50)
+    private String condition;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
+    public CollectibleItem() {}
+
+    public CollectibleItem(String name, String description, String condition, User owner) {
         this.name = name;
         this.description = description;
         this.condition = condition;
-        this.ownerId = ownerId;
+        this.owner = owner;
     }
 
     public Long getId() { return id; }
@@ -27,6 +44,6 @@ public class CollectibleItem {
     public String getCondition() { return condition; }
     public void setCondition(String condition) { this.condition = condition; }
 
-    public Long getOwnerId() { return ownerId; }
-    public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
+    public User getOwner() { return owner; }
+    public void setOwner(User owner) { this.owner = owner; }
 }

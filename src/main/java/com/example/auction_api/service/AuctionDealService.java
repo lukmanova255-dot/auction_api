@@ -7,6 +7,7 @@ import com.example.auction_api.model.AuctionLot;
 import com.example.auction_api.model.Bid;
 import com.example.auction_api.repository.AuctionDealRepository;
 import com.example.auction_api.repository.AuctionLotRepository;
+import com.example.auction_api.repository.BidRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,16 +18,16 @@ public class AuctionDealService {
     private final AuctionDealRepository repository;
     private final AuctionLotService lotService;
     private final AuctionLotRepository lotRepository;
-    private final BidService bidService;
+    private final BidRepository bidRepository;
 
     public AuctionDealService(AuctionDealRepository repository,
                               AuctionLotService lotService,
                               AuctionLotRepository lotRepository,
-                              BidService bidService) {
+                              BidRepository bidRepository) {
         this.repository = repository;
         this.lotService = lotService;
         this.lotRepository = lotRepository;
-        this.bidService = bidService;
+        this.bidRepository = bidRepository;
     }
 
     public List<AuctionDeal> findAll() {
@@ -49,29 +50,13 @@ public class AuctionDealService {
             throw new IllegalStateException("Deal for this lot already exists");
         }
 
-        List<Bid> bids = bidService.findAll().stream()
-                .filter(b -> b.getLotId().equals(req.getLotId()))
-                .toList();
+        Bid winner = bidRepository.findTopByLotIdOrderByAmountDesc(req.getLotId())
+                .orElseThrow(() -> new IllegalStateException("No bids for this lot"));
 
-        if (bids.isEmpty()) {
-            throw new IllegalStateException("No bids for this lot");
-        }
-
-        Bid winner = bids.stream()
-                .max((a, b) -> a.getAmount().compareTo(b.getAmount()))
-                .orElseThrow();
-
-        // Закрываем лот
         lot.setStatus("CLOSED");
         lotRepository.save(lot);
 
-        AuctionDeal deal = new AuctionDeal(
-                null,
-                req.getLotId(),
-                winner.getId(),
-                winner.getAmount(),
-                "PENDING"
-        );
+        AuctionDeal deal = new AuctionDeal(lot, winner, winner.getAmount(), "PENDING");
         return repository.save(deal);
     }
 

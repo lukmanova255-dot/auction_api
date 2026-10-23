@@ -3,6 +3,7 @@ package com.example.auction_api.service;
 import com.example.auction_api.dto.CollectibleItemRequest;
 import com.example.auction_api.exception.NotFoundException;
 import com.example.auction_api.model.CollectibleItem;
+import com.example.auction_api.model.User;
 import com.example.auction_api.repository.AuctionLotRepository;
 import com.example.auction_api.repository.CollectibleItemRepository;
 import org.springframework.stereotype.Service;
@@ -47,15 +48,13 @@ public class CollectibleItemService {
         if (req.getOwnerId() == null) {
             throw new IllegalArgumentException("ownerId is required");
         }
-        if (!userService.existsById(req.getOwnerId())) {
-            throw new NotFoundException("Owner (User) not found: id=" + req.getOwnerId());
-        }
+        User owner = userService.findById(req.getOwnerId());
+
         CollectibleItem item = new CollectibleItem(
-                null,
                 req.getName(),
                 req.getDescription(),
                 req.getCondition(),
-                req.getOwnerId()
+                owner
         );
         return repository.save(item);
     }
@@ -72,17 +71,15 @@ public class CollectibleItemService {
             item.setCondition(req.getCondition());
         }
         if (req.getOwnerId() != null) {
-            if (!userService.existsById(req.getOwnerId())) {
-                throw new NotFoundException("Owner (User) not found: id=" + req.getOwnerId());
-            }
-            item.setOwnerId(req.getOwnerId());
+            User owner = userService.findById(req.getOwnerId());
+            item.setOwner(owner);
         }
         return repository.save(item);
     }
 
     public void delete(Long id) {
         findById(id);
-        if (!lotRepository.findByItemId(id).isEmpty()) {
+        if (lotRepository.existsByItemId(id)) {
             throw new IllegalStateException("Cannot delete CollectibleItem: there are AuctionLots referencing it");
         }
         repository.deleteById(id);

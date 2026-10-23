@@ -11,6 +11,7 @@ import java.util.List;
 
 @Service
 public class UserService {
+
     private final UserRepository repository;
     private final CollectibleItemRepository itemRepository;
 
@@ -39,7 +40,10 @@ public class UserService {
         if (req.getEmail() == null || req.getEmail().isBlank()) {
             throw new IllegalArgumentException("email is required");
         }
-        User user = new User(null, req.getUsername(), req.getEmail());
+        if (repository.existsByUsername(req.getUsername())) {
+            throw new IllegalStateException("Username already taken: " + req.getUsername());
+        }
+        User user = new User(req.getUsername(), req.getEmail());
         return repository.save(user);
     }
 
@@ -56,7 +60,7 @@ public class UserService {
 
     public void delete(Long id) {
         findById(id);
-        if (!itemRepository.findByOwnerId(id).isEmpty()) {
+        if (itemRepository.existsByOwnerId(id)) {
             throw new IllegalStateException("Cannot delete User: there are CollectibleItems owned by this user");
         }
         repository.deleteById(id);
