@@ -14,6 +14,9 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    csrf:
+      secret: "super-secret-csrf-key-for-1bac24020"
 
 server:
   port: 8080

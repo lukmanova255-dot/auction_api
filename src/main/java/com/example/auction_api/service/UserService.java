@@ -5,6 +5,7 @@ import com.example.auction_api.exception.NotFoundException;
 import com.example.auction_api.model.User;
 import com.example.auction_api.repository.CollectibleItemRepository;
 import com.example.auction_api.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,10 +15,14 @@ public class UserService {
 
     private final UserRepository repository;
     private final CollectibleItemRepository itemRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repository, CollectibleItemRepository itemRepository) {
+    public UserService(UserRepository repository,
+                       CollectibleItemRepository itemRepository,
+                       PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.itemRepository = itemRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll() {
@@ -43,7 +48,16 @@ public class UserService {
         if (repository.existsByUsername(req.getUsername())) {
             throw new IllegalStateException("Username already taken: " + req.getUsername());
         }
-        User user = new User(req.getUsername(), req.getEmail());
+        // Используем пароль по умолчанию или из запроса
+        String rawPassword = req.getPassword() != null && !req.getPassword().isBlank()
+                ? req.getPassword()
+                : "changeme123";
+        User user = new User(
+                req.getUsername(),
+                req.getEmail(),
+                passwordEncoder.encode(rawPassword),
+                req.getRole() != null ? req.getRole() : "USER"
+        );
         return repository.save(user);
     }
 
@@ -54,6 +68,9 @@ public class UserService {
         }
         if (req.getEmail() != null && !req.getEmail().isBlank()) {
             user.setEmail(req.getEmail());
+        }
+        if (req.getPassword() != null && !req.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(req.getPassword()));
         }
         return repository.save(user);
     }
