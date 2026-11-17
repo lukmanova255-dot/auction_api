@@ -18,7 +18,7 @@ REST API для аукциона коллекционных предметов.
 
 \*   \[Лабораторная №5: JWT Authentication](https://github.com/lukmanova255-dot/auction\_api/tree/lab5) - Access/Refresh токены, управление сессиями.
 
-\*   \[Лабораторная №4: Spring Security (Basic Auth)](https://github.com/lukmanova255-dot/auction\_api/tree/main) - Роли, регистрация, BCrypt.
+\*   \[Лабораторная №4: Spring Security (Basic Auth)](https://github.com/lukmanova255-dot/auction\_api/tree/lab4) - Роли, регистрация, BCrypt.
 
 \*   \[Лабораторная №3: PostgreSQL](https://github.com/lukmanova255-dot/auction\_api/tree/lab3) - JPA, связи, бизнес-операции.
 
