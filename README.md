@@ -1,3 +1,5 @@
+$content = @'
+
 \# Auction API — 1bac24020
 
 
@@ -6,21 +8,35 @@ REST API для аукциона коллекционных предметов.
 
 
 
-\# Лабораторные работы
-
-Проект разбит по веткам. Чтобы посмотреть нужную лабораторную, нажмите на ссылку:
+\## Список лабораторных работ
 
 
 
-\*   \*\*\[Лабораторная №4 (Spring Security, роли, Basic Auth)](https://github.com/lukmanova255-dot/auction\_api/tree/main)\*\* — \*Вы сейчас в этой ветке\*
-
-\*   \*\*\[Лабораторная №3 (PostgreSQL, JPA, бизнес-операции)](https://github.com/lukmanova255-dot/auction\_api/tree/lab3)\*\*
-
-\*   \*\*\[Лабораторная №2 (REST API на коллекциях в памяти)](https://github.com/lukmanova255-dot/auction\_api/tree/lab2)\*\*
+Каждая лабораторная работа находится в отдельной ветке. Для просмотра кода перейдите по соответствующей ссылке:
 
 
 
-\# Технологии
+\*   \[Лабораторная №5: JWT Authentication](https://github.com/lukmanova255-dot/auction\_api/tree/lab5) - Access/Refresh токены, управление сессиями.
 
-Java 25, Spring Boot 4.1.1, Spring Data JPA, Spring Security, PostgreSQL 17, Maven.
+\*   \[Лабораторная №4: Spring Security (Basic Auth)](https://github.com/lukmanova255-dot/auction\_api/tree/main) - Роли, регистрация, BCrypt.
+
+\*   \[Лабораторная №3: PostgreSQL](https://github.com/lukmanova255-dot/auction\_api/tree/lab3) - JPA, связи, бизнес-операции.
+
+\*   \[Лабораторная №2: REST API](https://github.com/lukmanova255-dot/auction\_api/tree/lab2) - In-memory коллекции, без БД.
+
+
+
+\## Технологии
+
+Java 25, Spring Boot 4.1.1, Spring Data JPA, Spring Security, PostgreSQL 17, JWT, Maven.
+
+'@
+
+
+
+$utf8NoBom = New-Object System.Text.UTF8Encoding $false
+
+\[System.IO.File]::WriteAllText("$PWD\\README.md", $content, $utf8NoBom)
+
+Write-Host "README.md обновлён"
 
