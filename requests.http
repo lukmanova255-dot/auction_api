@@ -93,4 +93,32 @@ POST http://localhost:8080/api/auth/register
 Content-Type: application/json
 
 {"username": "public_user", "email": "public@example.com", "password": "password123"}
+### ============================================
+### TASK 5: JWT AUTHENTICATION
+### ============================================
+
+### 1. Register (get tokens) - 201
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{"username": "user_test", "password": "password123", "email": "test@example.com", "deviceId": "dev1"}
+
+### 2. Login (get tokens) - 200
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{"username": "user_test", "password": "password123"}
+
+### 3. Refresh tokens (pass your refresh token here)
+POST http://localhost:8080/auth/refresh
+Content-Type: application/json
+
+{"refreshToken": "ВСТАВЬТЕ_СЮДА_ВАШ_REFRESH_ТОКЕН"}
+
+### 4. Access protected endpoint without token - 401
+GET http://localhost:8080/api/users
+
+### 5. Access protected endpoint with token - 200
+GET http://localhost:8080/api/users
+Authorization: Bearer ВСТАВЬТЕ_СЮДА_ВАШ_ACCESS_ТОКЕН
 
